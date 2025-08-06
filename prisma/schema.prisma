@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Agent {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String   @unique
+  password  String
+  samples   Sample[]
+}
+
+model Sample {
+  id             String       @id @default(cuid())
+  patientName    String
+  pickupAddress  String
+  status         SampleStatus @default(SCHEDULED)
+  priority       Priority     @default(MEDIUM)
+  scheduledDate  DateTime     @db.Date
+  notes          String?
+  agentId        String
+  agent          Agent        @relation(fields: [agentId], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+enum SampleStatus {
+  SCHEDULED
+  COLLECTED
+  CANCELLED
+  DELAYED
+}
+
+enum Priority {
+  HIGH
+  MEDIUM
+  LOW
+}

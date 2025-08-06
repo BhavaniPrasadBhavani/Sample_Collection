@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Collection API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .endpoint { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 3px; white-space: pre-wrap; }
+        .error { background: #f8d7da; color: #721c24; }
+        .success { background: #d4edda; color: #155724; }
+        input, textarea { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Sample Collection API Test Page</h1>
+    <p>This page helps you test the API endpoints directly from your browser.</p>
+
+    <div class="endpoint">
+        <h3>1. Health Check</h3>
+        <button onclick="testHealth()">Test Health Endpoint</button>
+        <div id="health-result" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="endpoint">
+        <h3>2. Register Agent</h3>
+        <input type="text" id="reg-name" placeholder="Agent Name" value="Test Agent">
+        <input type="text" id="reg-phone" placeholder="Phone Number" value="">
+        <input type="password" id="reg-password" placeholder="Password" value="testpassword123">
+        <button onclick="registerAgent()">Register Agent</button>
+        <div id="register-result" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="endpoint">
+        <h3>3. Login Agent</h3>
+        <input type="text" id="login-phone" placeholder="Phone Number">
+        <input type="password" id="login-password" placeholder="Password" value="testpassword123">
+        <button onclick="loginAgent()">Login Agent</button>
+        <div id="login-result" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="endpoint">
+        <h3>4. Create Sample (Requires Login)</h3>
+        <input type="text" id="sample-patient" placeholder="Patient Name" value="John Doe">
+        <input type="text" id="sample-address" placeholder="Pickup Address" value="123 Main Street">
+        <input type="date" id="sample-date" value="2025-08-07">
+        <select id="sample-priority">
+            <option value="HIGH">High Priority</option>
+            <option value="MEDIUM" selected>Medium Priority</option>
+            <option value="LOW">Low Priority</option>
+        </select>
+        <textarea id="sample-notes" placeholder="Notes (optional)" rows="3">Test sample for API testing</textarea>
+        <button onclick="createSample()">Create Sample</button>
+        <div id="sample-result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        let authToken = '';
+        let currentAgentId = '';
+
+        async function makeRequest(method, endpoint, data = null) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            };
+
+            if (authToken) {
+                options.headers['Authorization'] = `Bearer ${authToken}`;
+            }
+
+            if (data) {
+                options.body = JSON.stringify(data);
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000${endpoint}`, options);
+                const result = await response.json();
+                return { status: response.status, data: result };
+            } catch (error) {
+                return { error: error.message };
+            }
+        }
+
+        function showResult(elementId, result, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `result ${isError ? 'error' : 'success'}`;
+            element.textContent = JSON.stringify(result, null, 2);
+        }
+
+        async function testHealth() {
+            const result = await makeRequest('GET', '/health');
+            showResult('health-result', result, !!result.error);
+        }
+
+        async function registerAgent() {
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value || `test${Date.now()}`;
+            const password = document.getElementById('reg-password').value;
+
+            // Update phone field for user reference
+            document.getElementById('reg-phone').value = phone;
+            document.getElementById('login-phone').value = phone;
+
+            const result = await makeRequest('POST', '/api/v1/auth/register', {
+                name, phone, password
+            });
+
+            showResult('register-result', result, result.status !== 201);
+        }
+
+        async function loginAgent() {
+            const phone = document.getElementById('login-phone').value;
+            const password = document.getElementById('login-password').value;
+
+            const result = await makeRequest('POST', '/api/v1/auth/login', {
+                phone, password
+            });
+
+            if (result.status === 200) {
+                authToken = result.data.token;
+                currentAgentId = result.data.agent.id;
+                document.querySelector('h3').textContent = `3. Login Agent (✅ Logged in as ${result.data.agent.name})`;
+            }
+
+            showResult('login-result', result, result.status !== 200);
+        }
+
+        async function createSample() {
+            if (!authToken) {
+                showResult('sample-result', { error: 'Please login first' }, true);
+                return;
+            }
+
+            const sampleData = {
+                patientName: document.getElementById('sample-patient').value,
+                pickupAddress: document.getElementById('sample-address').value,
+                scheduledDate: document.getElementById('sample-date').value,
+                priority: document.getElementById('sample-priority').value,
+                notes: document.getElementById('sample-notes').value,
+                agentId: currentAgentId
+            };
+
+            const result = await makeRequest('POST', '/api/v1/samples', sampleData);
+            showResult('sample-result', result, result.status !== 201);
+        }
+
+        // Generate unique phone number on page load
+        window.onload = function() {
+            document.getElementById('reg-phone').value = `test${Date.now()}`;
+        };
+    </script>
+</body>
+</html>

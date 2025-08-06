@@ -1,0 +1,75 @@
+# Sample Collection API - Example Requests
+
+## Authentication
+
+### Register Agent
+POST http://localhost:3000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "phone": "1234567890",
+  "password": "securepassword123"
+}
+
+###
+
+### Login Agent
+POST http://localhost:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "phone": "1234567890",
+  "password": "securepassword123"
+}
+
+###
+
+## Sample Management (Protected Routes)
+# Note: Replace YOUR_JWT_TOKEN with the actual token from login response
+
+### Get Samples for Agent
+GET http://localhost:3000/api/v1/samples/AGENT_ID
+Authorization: Bearer YOUR_JWT_TOKEN
+
+###
+
+### Create New Sample
+POST http://localhost:3000/api/v1/samples
+Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: application/json
+
+{
+  "patientName": "Jane Smith",
+  "pickupAddress": "123 Main Street, City, State 12345",
+  "scheduledDate": "2025-08-07",
+  "priority": "HIGH",
+  "notes": "Handle with care - fragile samples",
+  "agentId": "AGENT_ID"
+}
+
+###
+
+### Mark Sample as Collected
+PATCH http://localhost:3000/api/v1/samples/SAMPLE_ID/collect
+Authorization: Bearer YOUR_JWT_TOKEN
+
+###
+
+### Report Sample Delay
+POST http://localhost:3000/api/v1/samples/SAMPLE_ID/report-delay
+Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: application/json
+
+{
+  "reason": "Traffic delay due to road construction"
+}
+
+###
+
+## Health Check
+
+### Server Health
+GET http://localhost:3000/health
+
+###
