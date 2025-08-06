@@ -30,6 +30,7 @@ It took me a while to figure out how to cleanly separate **controllers**, **rout
 ###  Learning prisma
 I used **Prisma ORM** to interact with the database — but to be completely honest, most of my Prisma setup was guided heavily by AI (thanks ChatGPT 😅). I haven’t used it much before this, so I was learning as I went. It was super helpful but also confusing in parts (especially relations and schema migrations).
 
+## Setup 
 ## Project Structure
 
 ```
