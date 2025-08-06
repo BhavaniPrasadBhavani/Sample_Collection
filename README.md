@@ -20,6 +20,24 @@ The API server is currently running on http://localhost:3000 with all features i
 - **Type Safety**: Full TypeScript support
 - **Security**: Protected routes with middleware
 
+## What I Couldn't Finish (But Wanted To)
+
+To be honest, I wasn’t able to finish everything I originally planned due to time constraints. One feature I was really excited to build (but couldn't complete in time) was:
+
+**Delay Reporting / Rescheduling Samples**  
+Agents often face real-world delays — like traffic or connectivity issues. I had planned to allow agents to update the scheduled pickup time or report a delay, along with the reason. I believe this would’ve made the system more practical and usable in the field.
+
+---
+## Trickier Parts I Faced
+
+Some parts of the project were more challenging than expected:
+
+###  Folder Structure & Service Separation
+It took me a while to figure out how to cleanly separate **controllers**, **routes**, and **services** in a modular way using TypeScript. I had to re-structure things a couple of times to make it cleaner.
+
+###  Learning prisma
+I used **Prisma ORM** to interact with the database — but to be completely honest, most of my Prisma setup was guided heavily by AI (thanks ChatGPT 😅). I haven’t used it much before this, so I was learning as I went. It was super helpful but also confusing in parts (especially relations and schema migrations).
+
 ## Project Structure
 
 ```
