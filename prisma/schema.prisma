@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model Agent {
@@ -19,9 +19,9 @@ model Sample {
   id             String       @id @default(cuid())
   patientName    String
   pickupAddress  String
-  status         SampleStatus @default(SCHEDULED)
-  priority       Priority     @default(MEDIUM)
-  scheduledDate  DateTime     @db.Date
+  status         String       @default("SCHEDULED")  // SCHEDULED, COLLECTED, CANCELLED, DELAYED
+  priority       String       @default("MEDIUM")     // HIGH, MEDIUM, LOW
+  scheduledDate  DateTime
   notes          String?
   agentId        String
   agent          Agent        @relation(fields: [agentId], references: [id])
@@ -29,15 +29,4 @@ model Sample {
   updatedAt      DateTime     @updatedAt
 }
 
-enum SampleStatus {
-  SCHEDULED
-  COLLECTED
-  CANCELLED
-  DELAYED
-}
 
-enum Priority {
-  HIGH
-  MEDIUM
-  LOW
-}

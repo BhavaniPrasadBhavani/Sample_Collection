@@ -106,6 +106,8 @@ npm start
 
 ## Database Schema
 
+**Currently using SQLite for easy development and testing**
+
 ### Agent
 - `id`: Unique identifier
 - `name`: Agent name
@@ -116,8 +118,8 @@ npm start
 - `id`: Unique identifier
 - `patientName`: Patient name
 - `pickupAddress`: Pickup location
-- `status`: SCHEDULED | COLLECTED | CANCELLED | DELAYED
-- `priority`: HIGH | MEDIUM | LOW
+- `status`: String - "SCHEDULED" | "COLLECTED" | "CANCELLED" | "DELAYED"
+- `priority`: String - "HIGH" | "MEDIUM" | "LOW"
 - `scheduledDate`: Date for collection
 - `notes`: Optional notes
 - `agentId`: Reference to agent
