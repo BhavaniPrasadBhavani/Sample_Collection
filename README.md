@@ -178,7 +178,7 @@ curl -X POST http://localhost:3000/api/v1/samples \
 - **Authentication**: JSON Web Tokens (JWT)
 - **Password Hashing**: bcrypt\
 - 
-## output of the Assignment
+## Output of the Assignment
 <img width="709" height="361" alt="test1" src="https://github.com/user-attachments/assets/3b1eea33-b5cf-46e8-8198-cd06ace493dd" />
 <img width="737" height="391" alt="test2" src="https://github.com/user-attachments/assets/9001b99e-db2d-4b63-9045-44dbdd4db6ee" />
 <img width="692" height="376" alt="test3" src="https://github.com/user-attachments/assets/025e9e29-508a-4b62-a706-216494b5cb49" />
