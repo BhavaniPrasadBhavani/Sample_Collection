@@ -12,14 +12,6 @@ The API server is currently running on http://localhost:3000 with all features i
 - TypeScript code
 - Proper error handling
 
-## Features
-
-- **Authentication**: JWT-based authentication for agents
-- **Sample Management**: CRUD operations for sample collection
-- **Database**: PostgreSQL with Prisma ORM
-- **Type Safety**: Full TypeScript support
-- **Security**: Protected routes with middleware
-
 ## What I Couldn't Finish (But Wanted To)
 
 To be honest, I wasn’t able to finish everything I originally planned due to time constraints. One feature I was really excited to build (but couldn't complete in time) was:
